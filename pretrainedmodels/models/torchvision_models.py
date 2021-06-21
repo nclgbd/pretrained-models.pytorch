@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import types
 import re
 
-from mobilenetv2 import MobileNetV2
+from .mobilenetv2 import MobileNetV2
 
 #################################################################
 # You can find the definitions of those models here:
