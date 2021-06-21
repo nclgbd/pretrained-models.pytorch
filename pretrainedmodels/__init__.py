@@ -57,4 +57,4 @@ from .models.polynet import polynet
 
 # BYOD
 from .models.torchvision_models import mobilenetv2
-from .models.mobilenetv2 import mobilenetv2
+# from .models.mobilenetv2 import mobilenetv2
