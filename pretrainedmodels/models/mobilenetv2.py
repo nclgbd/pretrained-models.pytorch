@@ -140,7 +140,7 @@ class MobileNetV2(nn.Module):
                 m.bias.data.zero_()
 
 
-def mobilenet_v2(pretrained=True, n_class=1000):
+def mobilenetv2(pretrained=True, n_class=1000):
     model = MobileNetV2(width_mult=1, n_class=n_class)
 
     if pretrained:
@@ -155,9 +155,6 @@ def mobilenet_v2(pretrained=True, n_class=1000):
 
 
 if __name__ == '__main__':
-    net = mobilenet_v2(True)
-
-
-
+    net = mobilenetv2(True)
 
 
