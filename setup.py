@@ -64,7 +64,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/cadene/pretrained-models.pytorch',  # Optional
+    url='https://github.com/nclgbd/pretrained-models.pytorch.git',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
