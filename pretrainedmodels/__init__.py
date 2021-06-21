@@ -54,4 +54,7 @@ from .models.senet import se_resnext101_32x4d
 from .models.pnasnet import pnasnet5large
 from .models.polynet import polynet
 
+
+# BYOD
+from .models.torchvision_models import mobilenetv2
 from .models.mobilenetv2 import mobilenetv2
