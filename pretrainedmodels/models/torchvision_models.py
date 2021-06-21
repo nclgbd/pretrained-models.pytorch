@@ -573,15 +573,8 @@ def vgg19_bn(num_classes=1000, pretrained='imagenet'):
     model = modify_vggs(model)
     return model
 
-def modify_mobilenetv2(model):
-    pass
 
-
-
-
-
-
-### CUSTOM CLASSES
+### BYOM
 def mobilenetv2(num_classes=2, pretrained=True):
     model = models.MobileNetV2(width_mult=1, n_class=num_classes)
     
