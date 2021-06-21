@@ -78,7 +78,7 @@ class InvertedResidual(nn.Module):
 
 
 class MobileNetV2(nn.Module):
-    def __init__(self, n_class=1000, input_size=224, width_mult=1.):
+    def __init__(self, num_classes=1000, input_size=224, width_mult=1.):
         super(MobileNetV2, self).__init__()
         block = InvertedResidual
         input_channel = 32
@@ -114,7 +114,7 @@ class MobileNetV2(nn.Module):
         self.features = nn.Sequential(*self.features)
 
         # building classifier
-        self.classifier = nn.Linear(self.last_channel, n_class)
+        self.classifier = nn.Linear(self.last_channel, num_classes)
 
         self._initialize_weights()
 
@@ -140,24 +140,26 @@ class MobileNetV2(nn.Module):
                 m.bias.data.zero_()
 
 
-def mobilenet_v2(pretrained=True, n_class=1000):
-    model = MobileNetV2(width_mult=1, n_class=n_class)
 
+def mobilenetv2(num_classes=1000, pretrained='imagenet'):
+    model = MobileNetV2(num_classes=num_classes)
     if pretrained:
         try:
             from torch.hub import load_state_dict_from_url
         except ImportError:
             from torch.utils.model_zoo import load_url as load_state_dict_from_url
-        state_dict = load_state_dict_from_url(
-            'https://www.dropbox.com/s/47tyzpofuuyyv1b/mobilenetv2_1.0-f2a8633.pth.tar?dl=1', progress=True)
+            
+        settings = pretrained_settings['mobilenetv2'][pretrained]
+        assert num_classes == settings['num_classes'], \
+            "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
+
+        model = MobileNetV2(num_classes=num_classes)
+        state_dict = load_state_dict_from_url('https://www.dropbox.com/s/47tyzpofuuyyv1b/mobilenetv2_1.0-f2a8633.pth.tar?dl=1', progress=True)
         model.load_state_dict(state_dict)
-    return model
 
-
-if __name__ == '__main__':
-    net = mobilenet_v2(True)
-
-
-
-
+        model.input_space = settings['input_space']
+        model.input_size = settings['input_size']
+        model.input_range = settings['input_range']
+        model.mean = settings['mean']
+        model.std = settings['std']
 
