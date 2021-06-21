@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import types
 import re
 
+from mobilenetv2 import MobileNetV2
+
 #################################################################
 # You can find the definitions of those models here:
 # https://github.com/pytorch/vision/blob/master/torchvision/models
@@ -575,8 +577,8 @@ def vgg19_bn(num_classes=1000, pretrained='imagenet'):
 
 
 ### BYOM
-def mobilenetv2(num_classes=2, pretrained=True):
-    model = models.MobileNetV2(width_mult=1, n_class=num_classes)
+def mobilenetv2(num_classes=1000, pretrained=True):
+    model = MobileNetV2(width_mult=1, n_class=num_classes)
     
     if pretrained:
         try:
