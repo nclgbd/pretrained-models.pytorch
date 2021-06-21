@@ -573,20 +573,25 @@ def vgg19_bn(num_classes=1000, pretrained='imagenet'):
     model = modify_vggs(model)
     return model
 
+def modify_mobilenetv2(model):
+    pass
+
+
+
+
+
 
 ### CUSTOM CLASSES
-def mobilenetv2(num_classes=1000, pretrained=True):
-    model = models.MobileNetV2(width_mult=1)
+def mobilenetv2(num_classes=2, pretrained=True):
+    model = models.MobileNetV2(width_mult=1, n_class=num_classes)
     
-    if pretrained is not None:
-        settings = pretrained_settings['mobilenetv2'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    # if pretrained:
-    #     try:
-    #         from torch.hub import load_state_dict_from_url
-    #     except ImportError:
-    #         from torch.utils.model_zoo import load_url as load_state_dict_from_url
-    #     state_dict = load_state_dict_from_url(
-    #         'https://www.dropbox.com/s/47tyzpofuuyyv1b/mobilenetv2_1.0-f2a8633.pth.tar?dl=1', progress=True)
-    #     model.load_state_dict(state_dict)
+    if pretrained:
+        try:
+            from torch.hub import load_state_dict_from_url
+        except ImportError:
+            from torch.utils.model_zoo import load_url as load_state_dict_from_url
+        state_dict = load_state_dict_from_url(
+            'https://www.dropbox.com/s/47tyzpofuuyyv1b/mobilenetv2_1.0-f2a8633.pth.tar?dl=1', progress=True)
+        model.load_state_dict(state_dict)
+        
     return model
