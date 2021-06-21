@@ -140,8 +140,8 @@ class MobileNetV2(nn.Module):
                 m.bias.data.zero_()
 
 
-def mobilenet_v2(pretrained=True):
-    model = MobileNetV2(width_mult=1)
+def mobilenet_v2(pretrained=True, n_class=1000):
+    model = MobileNetV2(width_mult=1, n_class=n_class)
 
     if pretrained:
         try:
