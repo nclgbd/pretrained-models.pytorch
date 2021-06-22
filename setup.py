@@ -68,11 +68,11 @@ setup(
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Remi Cadene',  # Optional
+    author=['Remi Cadene', 'Nicole Gu'],  # Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='remi.cadene@icloud.com',  # Optional
+    author_email=['remi.cadene@icloud.com', 'nicoleguob@gmail.com'],  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
