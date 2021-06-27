@@ -133,12 +133,13 @@ def modify_alexnet(model, num_of_classes=2):
     # Modify attributs
     model._features = model.features
     del model.features
-    model.dropout0 = model.classifier[0]
-    model.linear0 = model.classifier[1]
-    model.relu0 = model.classifier[2]
-    model.dropout1 = model.classifier[3]
-    model.linear1 = model.classifier[4]
-    model.relu1 = model.classifier[5]
+    model.last_linear = model.classifier
+    model.dropout0 = model.last_linear[0]
+    model.linear0 = model.last_linear[1]
+    model.relu0 = model.last_linear[2]
+    model.dropout1 = model.last_linear[3]
+    model.linear1 = model.last_linear[4]
+    model.relu1 = model.last_linear[5]
     
     dim_feats = model.last_linear.in_features # =2048
     model.last_linear = nn.Linear(dim_feats, num_of_classes)
