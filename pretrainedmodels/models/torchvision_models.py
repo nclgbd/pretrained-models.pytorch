@@ -179,7 +179,7 @@ def alexnet(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['alexnet'][pretrained]
         model = load_pretrained(model, 1000, settings)
-    model = modify_alexnet(model)
+    model = modify_alexnet(model, num_classes)
     return model
 
 ###############################################################
@@ -218,7 +218,7 @@ def densenet121(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['densenet121'][pretrained]
         model = load_pretrained(model, 1000, settings)
-    model = modify_densenets(model)
+    model = modify_densenets(model, num_classes)
     return model
 
 def densenet169(num_classes=1000, pretrained='imagenet'):
@@ -229,7 +229,7 @@ def densenet169(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['densenet169'][pretrained]
         model = load_pretrained(model, 1000, settings)
-    model = modify_densenets(model)
+    model = modify_densenets(model, num_classes)
     return model
 
 def densenet201(num_classes=1000, pretrained='imagenet'):
@@ -240,7 +240,7 @@ def densenet201(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['densenet201'][pretrained]
         model = load_pretrained(model, 1000, settings)
-    model = modify_densenets(model)
+    model = modify_densenets(model, num_classes)
     return model
 
 def densenet161(num_classes=1000, pretrained='imagenet'):
@@ -251,7 +251,7 @@ def densenet161(num_classes=1000, pretrained='imagenet'):
     if pretrained is not None:
         settings = pretrained_settings['densenet161'][pretrained]
         model = load_pretrained(model, 1000, settings)
-    model = modify_densenets(model)
+    model = modify_densenets(model, num_classes)
     return model
 
 ###############################################################
