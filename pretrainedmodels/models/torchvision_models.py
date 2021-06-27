@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import
+from torch import nn
 import torchvision.models as models
 import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
@@ -128,7 +129,7 @@ def load_pretrained(model, num_classes, settings):
 #################################################################
 # AlexNet
 
-def modify_alexnet(model):
+def modify_alexnet(model, num_of_classes=2):
     # Modify attributs
     model._features = model.features
     del model.features
@@ -138,7 +139,9 @@ def modify_alexnet(model):
     model.dropout1 = model.classifier[3]
     model.linear1 = model.classifier[4]
     model.relu1 = model.classifier[5]
-    model.last_linear = model.classifier[6]
+    
+    dim_feats = model.last_linear.in_features # =2048
+    model.last_linear = nn.Linear(dim_feats, num_of_classes)
     del model.classifier
 
     def features(self, input):
@@ -175,17 +178,20 @@ def alexnet(num_classes=1000, pretrained='imagenet'):
     model = models.alexnet(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['alexnet'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_alexnet(model)
     return model
 
 ###############################################################
 # DenseNets
 
-def modify_densenets(model):
+def modify_densenets(model, num_of_classes=2):
     # Modify attributs
     model.last_linear = model.classifier
     del model.classifier
+    
+    dim_feats = model.last_linear.in_features
+    model.last_linear = nn.Linear(dim_feats, num_of_classes)
 
     def logits(self, features):
         x = F.relu(features, inplace=True)
@@ -211,7 +217,7 @@ def densenet121(num_classes=1000, pretrained='imagenet'):
     model = models.densenet121(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['densenet121'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_densenets(model)
     return model
 
@@ -222,7 +228,7 @@ def densenet169(num_classes=1000, pretrained='imagenet'):
     model = models.densenet169(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['densenet169'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_densenets(model)
     return model
 
@@ -233,7 +239,7 @@ def densenet201(num_classes=1000, pretrained='imagenet'):
     model = models.densenet201(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['densenet201'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_densenets(model)
     return model
 
@@ -244,7 +250,7 @@ def densenet161(num_classes=1000, pretrained='imagenet'):
     model = models.densenet161(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['densenet161'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_densenets(model)
     return model
 
@@ -258,10 +264,13 @@ def inceptionv3(num_classes=1000, pretrained='imagenet'):
     model = models.inception_v3(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['inceptionv3'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
 
     # Modify attributs
     model.last_linear = model.fc
+    
+    dim_feats = model.last_linear.in_features
+    model.last_linear = nn.Linear(dim_feats, num_classes)
     del model.fc
 
     def features(self, input):
@@ -313,9 +322,11 @@ def inceptionv3(num_classes=1000, pretrained='imagenet'):
 ###############################################################
 # ResNets
 
-def modify_resnets(model):
+def modify_resnets(model, num_of_classes=2):
     # Modify attributs
     model.last_linear = model.fc
+    dim_feats = model.last_linear.in_features
+    model.last_linear = nn.Linear(dim_feats, num_of_classes)
     model.fc = None
 
     def features(self, input):
@@ -353,8 +364,8 @@ def resnet18(num_classes=1000, pretrained='imagenet'):
     model = models.resnet18(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['resnet18'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_resnets(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_resnets(model, num_of_classes=num_classes)
     return model
 
 def resnet34(num_classes=1000, pretrained='imagenet'):
@@ -363,8 +374,8 @@ def resnet34(num_classes=1000, pretrained='imagenet'):
     model = models.resnet34(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['resnet34'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_resnets(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_resnets(model, num_of_classes=num_classes)
     return model
 
 def resnet50(num_classes=1000, pretrained='imagenet'):
@@ -373,8 +384,8 @@ def resnet50(num_classes=1000, pretrained='imagenet'):
     model = models.resnet50(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['resnet50'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_resnets(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_resnets(model, num_of_classes=num_classes)
     return model
 
 def resnet101(num_classes=1000, pretrained='imagenet'):
@@ -383,8 +394,8 @@ def resnet101(num_classes=1000, pretrained='imagenet'):
     model = models.resnet101(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['resnet101'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_resnets(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_resnets(model, num_of_classes=num_classes)
     return model
 
 def resnet152(num_classes=1000, pretrained='imagenet'):
@@ -393,8 +404,8 @@ def resnet152(num_classes=1000, pretrained='imagenet'):
     model = models.resnet152(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['resnet152'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_resnets(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_resnets(model, num_of_classes=num_classes)
     return model
 
 ###############################################################
@@ -435,7 +446,7 @@ def squeezenet1_0(num_classes=1000, pretrained='imagenet'):
     model = models.squeezenet1_0(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['squeezenet1_0'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_squeezenets(model)
     return model
 
@@ -448,14 +459,14 @@ def squeezenet1_1(num_classes=1000, pretrained='imagenet'):
     model = models.squeezenet1_1(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['squeezenet1_1'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
+        model = load_pretrained(model, 1000, settings)
     model = modify_squeezenets(model)
     return model
 
 ###############################################################
 # VGGs
 
-def modify_vggs(model):
+def modify_vggs(model, num_of_classes=2):
     # Modify attributs
     model._features = model.features
     del model.features
@@ -466,6 +477,9 @@ def modify_vggs(model):
     model.relu1 = model.classifier[4]
     model.dropout1 = model.classifier[5]
     model.last_linear = model.classifier[6]
+    
+    dim_feats = model.last_linear.in_features
+    model.last_linear = nn.Linear(dim_feats, num_of_classes)
     del model.classifier
 
     def features(self, input):
@@ -500,8 +514,8 @@ def vgg11(num_classes=1000, pretrained='imagenet'):
     model = models.vgg11(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg11'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg11_bn(num_classes=1000, pretrained='imagenet'):
@@ -510,8 +524,8 @@ def vgg11_bn(num_classes=1000, pretrained='imagenet'):
     model = models.vgg11_bn(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg11_bn'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg13(num_classes=1000, pretrained='imagenet'):
@@ -520,8 +534,8 @@ def vgg13(num_classes=1000, pretrained='imagenet'):
     model = models.vgg13(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg13'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg13_bn(num_classes=1000, pretrained='imagenet'):
@@ -530,8 +544,8 @@ def vgg13_bn(num_classes=1000, pretrained='imagenet'):
     model = models.vgg13_bn(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg13_bn'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg16(num_classes=1000, pretrained='imagenet'):
@@ -540,8 +554,8 @@ def vgg16(num_classes=1000, pretrained='imagenet'):
     model = models.vgg16(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg16'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg16_bn(num_classes=1000, pretrained='imagenet'):
@@ -550,8 +564,8 @@ def vgg16_bn(num_classes=1000, pretrained='imagenet'):
     model = models.vgg16_bn(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg16_bn'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg19(num_classes=1000, pretrained='imagenet'):
@@ -560,8 +574,8 @@ def vgg19(num_classes=1000, pretrained='imagenet'):
     model = models.vgg19(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg19'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
 def vgg19_bn(num_classes=1000, pretrained='imagenet'):
@@ -570,7 +584,7 @@ def vgg19_bn(num_classes=1000, pretrained='imagenet'):
     model = models.vgg19_bn(pretrained=False)
     if pretrained is not None:
         settings = pretrained_settings['vgg19_bn'][pretrained]
-        model = load_pretrained(model, num_classes, settings)
-    model = modify_vggs(model)
+        model = load_pretrained(model, 1000, settings)
+    model = modify_vggs(model, num_of_classes=num_classes)
     return model
 
