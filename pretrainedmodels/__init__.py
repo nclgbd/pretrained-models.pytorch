@@ -57,3 +57,5 @@ from .models.polynet import polynet
 
 # BYOD
 from .models.mobilenetv2 import mobilenetv2
+from .models.mobilenetv2 import MobileNetV2
+from .models.xception import Xception

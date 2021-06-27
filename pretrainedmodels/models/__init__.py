@@ -60,3 +60,5 @@ from .polynet import polynet
 
 ### BROUGHT IN MODEL FROM OTHER SOURCES
 from .mobilenetv2 import mobilenetv2
+from .mobilenetv2 import MobileNetV2
+from .xception import Xception
