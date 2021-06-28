@@ -163,3 +163,4 @@ def mobilenetv2(num_classes=1000, pretrained='imagenet'):
         model.mean = settings['mean']
         model.std = settings['std']
 
+    return model
